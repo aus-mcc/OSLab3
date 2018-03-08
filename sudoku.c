@@ -13,7 +13,12 @@ int rowCheck(FILE *fp, int lineNum){
         char line[256];
         while(fgets(line, sizeof line, fp) != NULL){
             if (count == lineNum){
-                // do the check
+                char row[9];
+                for(int i=0;i<9;i++){
+                    row[i] = fgetc(fp);
+                    printf("%c",row[i]);
+                }
+                
             }
             else{
                 count++;
@@ -47,6 +52,7 @@ int main(){
 
     FILE *fp = fopen("puzzle.txt", "r");
     int line = 0;
+    rowCheck(fp, 1);
 
     fclose(fp);
     return 0;
