@@ -108,10 +108,11 @@ int main(){
         for(int rws=0;rws<=6;rws+=3){
             box[i].column = cols;
             box[i].row = rws;
-            pthread_create(&b_thd[i], 0, subCheck, (void *) box[i]);
+            pthread_create(&b_thd[i], 0, subCheck, &box[i]);
         }
     }
     for(int j=0;j<3;j++){
+        void *solution[j];
         if(j==0){
             pthread_join(r_thd,&solution[j]);
         }
