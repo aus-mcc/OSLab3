@@ -7,6 +7,7 @@
 #define SUB_THREADS 9
 
 int board[9][9];
+int solution[11];
 
 void readFile(FILE *fp){
     for(int i=0;i<9;i++){
@@ -15,7 +16,7 @@ void readFile(FILE *fp){
         }
     }
 }
-int rowCheck(FILE *fp, int lineNum){
+void rowCheck(){
     int isValid = 1;
     for(int r=0;r<9;r++){
         int used[9]={0};
@@ -31,7 +32,7 @@ int rowCheck(FILE *fp, int lineNum){
     }
     return isValid;
 }
-int colCheck(FILE *fp, int colNum){
+void colCheck(){
    int colValid = 1;
    for(int c=0;c<9;c++){
        int colUsed[9] = {0};
@@ -68,7 +69,19 @@ int subCheck(int startRow, int startCol, FILE *fp){
     return boxValid;
 }
 
-
+int check(int a[]){
+    int fullValid = 1;
+    for(int i=0;i<8;i++){
+        if(a[i] != a[i+1]){
+            fullValid = 0;
+        }
+        else{
+            fullValid =1;
+        }
+    }
+    return fullValid;
+        
+}
 int main(){
     FILE *fp = fopen("puzzle.txt", "r");
     readFile(fp);
@@ -85,12 +98,27 @@ int main(){
             pthread_create(&b_thd[i], 0, subCheck, (void*) "Sub Grid Check");
         }
     }
-
-    pthread_join(r_thd,0);
-    pthread_join(c_thd,0);
-    for(int i=0;i<9;i++){
-        pthread_join(b_thd[i],0);
+    for(int j=0;j<3;j++){
+        if(j==0){
+            pthread_join(r_thd,&solution[j]);
+        }
+        if(j==2){
+            pthread_join(c_thd,&solution[j]);
+        }
+        else{
+            pthread_join(b_thd[i],&solution[j]);
+        }
     }
+
+    int isCorrect = check(solution);
+    if(isCorrect){
+        printf("Solution is valid");
+    }
+    else{
+        printf("Solution is not valid");
+    }
+
+
 
     fclose(fp);
     return 0;
