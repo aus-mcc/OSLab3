@@ -70,12 +70,27 @@ int subCheck(int startRow, int startCol, FILE *fp){
 
 
 int main(){
-
-    int checked[11]; // array to hold check validation
-
     FILE *fp = fopen("puzzle.txt", "r");
-    int line = 0;
-    rowCheck(fp, 1);
+    readFile(fp);
+
+    pthread_t r_thd;
+    pthread_t c_thd;
+    pthread_t b_thd[9];
+
+    pthread_create(&r_thd, 0, rowCheck, (void*) "Check Rows");
+    pthread_create(&c_thd, 0, colCheck, (void*) "Column Check");
+    int i=0;
+    for(int cols=0;cols<=6;cols+=3){
+        for(int rws=0;rws<=6;rws+=3){
+            pthread_create(&b_thd[i], 0, subCheck, (void*) "Sub Grid Check");
+        }
+    }
+
+    pthread_join(r_thd,0);
+    pthread_join(c_thd,0);
+    for(int i=0;i<9;i++){
+        pthread_join(b_thd[i],0);
+    }
 
     fclose(fp);
     return 0;
