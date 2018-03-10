@@ -9,6 +9,11 @@
 int board[9][9];
 int solution[11];
 
+typedef struct{
+    int row;
+    int column;
+} box;
+
 void readFile(FILE *fp){
     for(int i=0;i<9;i++){
         for(int j=0;j<9;j++){
@@ -16,8 +21,8 @@ void readFile(FILE *fp){
         }
     }
 }
-void rowCheck(){
-    int isValid = 1;
+void *rowCheck(){
+    int *isValid = 1;
     for(int r=0;r<9;r++){
         int used[9]={0};
         for(int v=0;v<9;v++){
@@ -32,8 +37,8 @@ void rowCheck(){
     }
     return isValid;
 }
-void colCheck(){
-   int colValid = 1;
+void *colCheck(){
+   int *colValid = 1;
    for(int c=0;c<9;c++){
        int colUsed[9] = {0};
        for(int b=0;b<9;b++){
@@ -49,16 +54,20 @@ void colCheck(){
     }
     return colValid;
 }
-int subCheck(int startRow, int startCol, FILE *fp){
-    int boxValid = 1;
+int *subCheck(void * grid){
+    int *boxValid = 1;
     int pos;
-    int boxValid[9] = {0};
+    int boxVal[9] = {0};
+    box *sub = grid; 
+    int gcol = sub->column;
+    int grow = sub->row;
+
 
     for(int col=0;col<3;col++){
         for(int row=0;row,3;row++){
-            pos = board[row+startRow][col+startCol];
-            if(boxValid[&pos -1]==0){
-                boxValid[&pos -1] =1;
+            pos = board[row+grow][col+gcol];
+            if(boxVal[pos -1]==0){
+                boxVal[pos -1] =1;
             }
             else{
                 boxValid = 0;
@@ -90,12 +99,16 @@ int main(){
     pthread_t c_thd;
     pthread_t b_thd[9];
 
+    box box[9];
+
     pthread_create(&r_thd, 0, rowCheck, (void*) "Check Rows");
     pthread_create(&c_thd, 0, colCheck, (void*) "Column Check");
     int i=0;
     for(int cols=0;cols<=6;cols+=3){
         for(int rws=0;rws<=6;rws+=3){
-            pthread_create(&b_thd[i], 0, subCheck, (void*) "Sub Grid Check");
+            box[i].column = cols;
+            box[i].row = rws;
+            pthread_create(&b_thd[i], 0, subCheck, (void *) box[i]);
         }
     }
     for(int j=0;j<3;j++){
