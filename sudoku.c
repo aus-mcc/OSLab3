@@ -7,6 +7,14 @@
 #define SUB_THREADS 9
 
 int board[9][9];
+
+void readFile(FILE *fp){
+    for(int i=0;i<9;i++){
+        for(int j=0;j<9;j++){
+            fscanf(fp, "%d", &board[i][j]);
+        }
+    }
+}
 int rowCheck(FILE *fp, int lineNum){
     int isValid = 1;
     for(int r=0;r<9;r++){
@@ -41,12 +49,23 @@ int colCheck(FILE *fp, int colNum){
     return colValid;
 }
 int subCheck(int startRow, int startCol, FILE *fp){
-    for(int r = startRow; r<startRow+3; r++){
-        rowCheck(fp, r);
+    int boxValid = 1;
+    int pos;
+    int boxValid[9] = {0};
+
+    for(int col=0;col<3;col++){
+        for(int row=0;row,3;row++){
+            pos = board[row+startRow][col+startCol];
+            if(boxValid[&pos -1]==0){
+                boxValid[&pos -1] =1;
+            }
+            else{
+                boxValid = 0;
+                break;
+            }
+        }
     }
-    for(int c = startCol; c<startCol+3;c++){
-        colCheck(fp, c);
-    }
+    return boxValid;
 }
 
 
