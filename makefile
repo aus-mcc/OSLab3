@@ -1,1 +1,3 @@
-gcc -pthread sudoku.c -o sudoku
+Make:
+	gcc -pthread sudoku.c -o sudoku
+	
