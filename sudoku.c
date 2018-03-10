@@ -22,7 +22,7 @@ void readFile(FILE *fp){
     }
 }
 void *rowCheck(){
-    int *isValid = 1;
+    int *isValid = (int*)1;
     for(int r=0;r<9;r++){
         int used[9]={0};
         for(int v=0;v<9;v++){
@@ -38,7 +38,7 @@ void *rowCheck(){
     return isValid;
 }
 void *colCheck(){
-   int *colValid = 1;
+   int *colValid = (int*)1;
    for(int c=0;c<9;c++){
        int colUsed[9] = {0};
        for(int b=0;b<9;b++){
@@ -54,8 +54,8 @@ void *colCheck(){
     }
     return colValid;
 }
-int *subCheck(void * grid){
-    int *boxValid = 1;
+void *subCheck(void * grid){
+    int *boxValid = (int*)1;
     int pos;
     int boxVal[9] = {0};
     box *sub = grid; 
