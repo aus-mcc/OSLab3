@@ -6,35 +6,39 @@
 #define COL_THREADS 1
 #define SUB_THREADS 9
 
-
+int board[9][9];
 int rowCheck(FILE *fp, int lineNum){
-    int count = 0;
-    if(fp != NULL){
-        char line[256];
-        while(fgets(line, sizeof line, fp) != NULL){
-            if (count == lineNum){
-                char row[9];
-                for(int i=0;i<9;i++){
-                    row[i] = fgetc(fp);
-                    printf("%c",row[i]);
-                }
-                
+    int isValid = 1;
+    for(int r=0;r<9;r++){
+        int used[9]={0};
+        for(int v=0;v<9;v++){
+            if(used[board[r][v]-1]==0){
+                used[board[r][v]-1] =1;
             }
             else{
-                count++;
+                isValid = 0;
+                break;
             }
         }
     }
+    return isValid;
 }
 int colCheck(FILE *fp, int colNum){
-    int count = 0;
-    if(fp!=NULL){
-        char word[30];
-        while(!feof(fp)){
-            fscanf(fp, "%s%*[^\n]", word);
-            // do check
-        }
+   int colValid = 1;
+   for(int c=0;c<9;c++){
+       int colUsed[9] = {0};
+       for(int b=0;b<9;b++){
+           int cur = board[c][b];
+           if(colUsed[cur-1]==0){
+               colUsed[cur-1] = 1;
+           }
+           else{
+               colValid = 0;
+               break;
+           }
+       }
     }
+    return colValid;
 }
 int subCheck(int startRow, int startCol, FILE *fp){
     for(int r = startRow; r<startRow+3; r++){
